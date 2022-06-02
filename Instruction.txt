@@ -1,0 +1,7 @@
+First:
+    Install Xampp first as it will serve as the local storage for our website
+    Toggle Apache and MySql in the Xampp Control Panel
+Second:
+    Put the ReyChabby Folder in the C:\xampp\htdocs\
+Lastly: 
+    Open your Web Browser and Browse for http://localhost/reychabby/index.html
