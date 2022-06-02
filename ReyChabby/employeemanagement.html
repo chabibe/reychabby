@@ -1,0 +1,121 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Management Page</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+</head>
+<body>
+    
+    <div class="banner">
+        <div class="navbar">
+
+            <ul>
+                <li><a href="index.html">Homepage</a></li>
+                <li><a href="employeemanagement.html">Employee Management</a></li>
+                <li><a href="jobmanagement.html">Job Management</a></li>
+            </ul>
+        </div>
+
+        
+
+        <div class="content">
+            <form name = "form" action="./php/add.php" method = "post" enctype = "multipart/form-data" >    
+                <div class = "formcontainer">  
+                    <h3>Add Employee</h3>  
+                    <div class="form-group input-group">
+                        <span class="input-group-addon" style="width:100px;" >Fullname:</span>
+                        <input type="text" style="width:300px;" class="form-control"  name="fname" id="fullname">
+                    </div>
+                    <div class = "form-group input-group">  
+                        <span class="input-group-addon" style="width:100px;">Photo:</span>  
+                        <input type="file" style="width:300px;" class="form-control" name="my_image">
+                    </div> 
+                    
+
+                    <div class = "form-group input-group">    
+                        <label class="switch">
+                            <input type="checkbox" name='tofeature' value="True">   
+                            <span class="toggle round"></span>
+                            <label style="margin-top: -.5px;">Feature</label>
+                        </label> 
+                    </div> 
+
+                    <div class = "form_group input-group">  
+                        <button type="submit" value="submit" class="btn btn-success"><span class="glyphicon glyphicon-plus"></span> </i> Add Employee</button>
+                    </div>
+                    
+                </div>    
+            </form>
+            
+            <div class="employeestable">
+                
+                <h3>Employee</h3>
+                <?Php
+                
+                    include_once './php/connection.php';
+
+                    $count = 0;
+
+                    $sql = "SELECT ID, Name, Profile FROM tbl_employee";
+
+                    $result = $conn->query($sql);
+                    echo "<table id='employee'>";
+                    echo "<tr>";
+                    echo "<th></th>";
+                    echo "<th>Name</th>";
+
+                    echo "</tr>";
+                    if ($result->num_rows > 0) {
+                        while($row = $result->fetch_assoc()) {
+                            $count++;
+                            
+
+                            echo "<tr>";
+                            echo "<td><img src='./profiles/".$row['Profile']."' alt='' style='width: 60px; height: 80px;'></td>";
+                            echo "<td><span class='name'>".$row['Name']."</td>";
+
+                            echo "<td><button type='button' class='btn btn-success jobs' value='".$row['ID']."' data-toggle='modal' data-target='#myModal'>Jobs</button></td>";
+                            echo "<td><button type='button' class='btn btn-success edit' value='".$row['Name']."' id='btn' onclick='btnclick()'>Edit</button></td>";
+                            echo "<td><a href=\"./php/delete.php?id=".$row['ID']."\" class='btn btn-success edit' style='background-color: rgb(151, 0, 0);'>Delete</a></td>";
+                            echo "</tr>";
+        
+                            }
+                        } else {
+                    }
+                    echo "<h3>(".$count.")</h3>"
+                ?>
+            </div>
+        </div>
+    </div>
+
+    <?Php include_once './php/jobmodal.php'; ?>
+
+
+<script>
+$(document).ready(function(){
+
+$(document).on('click', '.jobs', function(){
+    const first = $(this).closest("tr").find('.name').text(); 
+    $('#efirstname').val(first);
+});
+});
+
+function btnclick(){
+    document.getElementById("fullname").value = "";
+    var str1 = document.getElementById("btn").value;
+    console.log("<br>Button value: "+str1);
+    document.getElementById("fullname").value = str1;
+}
+</script>
+
+    
+</body>
+</html>

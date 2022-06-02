@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Management Page</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+    <script>
+      
+        function dosomething(element) {
+          document.getElementById("header").innerHTML = element.value;
+          var test = element.value;
+          print
+        }
+
+$(document).ready(function(){
+
+$(document).on('click', '.edit', function(){
+
+    const first = $(this).closest("tr").find('.firstname').text(); 
+    
+    $('#efirstname').val(first); $('#qfirstname').val(first);  });
+
+
+
+});
+
+
+  
+    </script>
+
+
+    <div class="banner">
+        <div class="navbar">
+            <img src="logo.png" alt="" class="logo">
+            <ul>
+                <li><a href="index.html">Homepage</a></li>
+                <li><a href="employeemanagement.html">Employee Management</a></li>
+                <li><a href="jobmanagement.html">Job Management</a></li>
+            </ul>
+        </div>
+
+        <div class="content">
+            
+            <form name = "form" action="./php/addjob.php" method = "post">    
+                <div class = "formcontainer"> 
+                    <h3>Add Job</h3>   
+                    <div class="form-group input-group">
+                        <span class="input-group-addon" style="width:100px;">Job Title:</span>
+                        <input type="text" style="width:300px;" class="form-control"  name="title">
+                    </div>
+
+                    <div class = "form_group">  
+                        <button type="submit" value="submit" class="btn btn-success"><span class="glyphicon glyphicon-plus"></span> </i> Add</button>
+                    </div>
+                    
+                </div>    
+            </form>
+            
+            <div class="employeestable">
+                <h3>Employee</h3>
+                <?Php
+                    
+                    include_once './php/connection.php';
+
+                    $sql = "SELECT DISTINCT JobTitle FROM tbl_occupation";
+
+                    $result = $conn->query($sql);
+                    echo "<table id='employee'>";
+                    echo "<tr>";
+                    echo "<th>Job </th>";
+                    echo "<th>Number of Employee </th>";
+
+                    echo "</tr>";
+                    if ($result->num_rows > 0) {
+                        while($row = $result->fetch_assoc()) {
+                            $employID = $row['JobTitle'];
+
+                            echo "<tr>";
+                            echo "<td><span class='firstname'>".$row['JobTitle']."</td>";
+                            echo "<td>";
+                                $sqlq = "SELECT EmployeeID FROM tbl_occupation WHERE JobTitle = '".$row['JobTitle']."'";
+                                $results = $conn->query($sqlq);
+                                $count = 0;
+                                if ($results->num_rows > 0) {
+                                    while($rows = $results->fetch_assoc()) {
+                                        $count++;
+                                        if($rows['EmployeeID'] == null){
+                                            $count = 0;
+                                        }
+                                    }
+                                    echo $count;
+                                }
+                                    
+                            echo "</td>";
+                            echo "<td><button type='button' class='btn btn-success edit' value='".$row['JobTitle']."' data-toggle='modal' data-target='#myModal'><span class='glyphicon glyphicon-edit'></span> Edit</button></td>";
+                            echo "<td>";
+                                $sqlq = "SELECT EmployeeID FROM tbl_occupation WHERE JobTitle = '".$row['JobTitle']."'";
+                                $results = $conn->query($sqlq);
+                                $count = 0;
+                                if ($results->num_rows > 0) {
+                                    while($rows = $results->fetch_assoc()) {
+                                        if($rows['EmployeeID'] == null){
+                                            echo "<a href=\"./php/deletejob.php?id=".$row['JobTitle']."\"  >Delete</a></td>";
+                                        }
+                                    }
+
+                                }
+                                
+                            echo "</tr>";
+        
+                            }
+                        } else {
+    
+                    }
+
+                ?>
+            </div>
+        </div>
+    </div>
+<?Php include_once './php/modal.php'; ?>
+
+</body>
+</html>
